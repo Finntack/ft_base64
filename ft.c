@@ -11,7 +11,7 @@ static const char base64_table[] = {
 static const char base64_pad = '=';
 
 
-
+// Stolen from https://github.com/php/php-src/blob/master/ext/standard/base64.c
  char *base64_encode(const char *str, size_t length, size_t *ret_length, int cut)
 {
     const  char *current = str;
@@ -25,8 +25,13 @@ static const char base64_pad = '=';
         return NULL;
     }
 
-    result = (char *) malloc(((length + 2) / 3) * (4 * sizeof(char)));
+    size_t out_l = ((length + 2) / 3) * (4 * sizeof(char));
+    out_l += cut * ((out_l)/76) * 2 * (4 * sizeof(char));
+
+    result = malloc(out_l);
     p = result;
+
+    int splitter = 0;
 
     while (length > 2) { /* keep going until we have less than 24 bits */
         *p++ = base64_table[current[0] >> 2];
@@ -36,6 +41,14 @@ static const char base64_pad = '=';
 
         current += 3;
         length -= 3; /* we just handle 3 octets of data */
+
+        splitter += 4;
+        if (cut && splitter == 76)
+        {
+            *p++ = '\r';
+            *p++ = '\n';
+            splitter = 0;
+        }
     }
 
     /* now deal with the tail end of things */
@@ -51,9 +64,15 @@ static const char base64_pad = '=';
             *p++ = base64_pad;
         }
     }
-    if (ret_length != NULL) {
+
+    if (cut)
+    {
+        *ret_length = out_l;
+    }
+    else if (ret_length != NULL) {
         *ret_length = (int)(p - result);
     }
+
     *p = '\0';
     return result;
 }
