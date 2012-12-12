@@ -1,2 +1,6 @@
-ft_base64
+Fast base64 ecode for python
 =========
+
+This is a python module that is on average 3-10 times faster than the native python `base64.encodestring()`
+
+The module is distributed under the MIT license
