@@ -1,66 +1,62 @@
 #include <Python.h>
 
 
-static char encoding_table[] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
-                                'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
-                                'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X',
-                                'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f',
-                                'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n',
-                                'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
-                                'w', 'x', 'y', 'z', '0', '1', '2', '3',
-                                '4', '5', '6', '7', '8', '9', '+', '/'};
-static int mod_table[] = {0, 2, 1};
+static const char base64_table[] = {
+    'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+    'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+    'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+    'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+    '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '+', '/', '\0'
+};
+static const char base64_pad = '=';
 
 
-char *base64_encode(const char *data,
-                    size_t input_length,
-                    size_t *output_length,
-                    int cut) {
 
-    *output_length = (size_t) 1 + (4.0 * ceil((double) input_length / 3.0));
+ char *base64_encode(const char *str, size_t length, size_t *ret_length, int cut)
+{
+    const  char *current = str;
+     char *p;
+     char *result;
 
-    printf("%zi\n", *output_length);
-
-    *output_length += ceil(((double)*output_length / 76.0) * 2.0) * cut;
-
-    printf("%zi\n", *output_length);
-
-    char *encoded_data = malloc(*output_length);
-    if (encoded_data == NULL) return NULL;
-
-    int i,j,k;
-
-    for (i = 0, j = 0, k = 0; i < input_length;) {
-        k+=4;
-
-        uint32_t octet_a = i < input_length ? data[i++] : 0;
-        uint32_t octet_b = i < input_length ? data[i++] : 0;
-        uint32_t octet_c = i < input_length ? data[i++] : 0;
-
-        uint32_t triple = (octet_a << 0x10) + (octet_b << 0x08) + octet_c;
-
-        encoded_data[j++] = encoding_table[(triple >> 3 * 6) & 0x3F];
-        encoded_data[j++] = encoding_table[(triple >> 2 * 6) & 0x3F];
-        encoded_data[j++] = encoding_table[(triple >> 1 * 6) & 0x3F];
-        encoded_data[j++] = encoding_table[triple & 0x3F];
-
-        if (cut && k == 76)
-        {
-            k = 0;
-            encoded_data[j++] = '\r';
-            encoded_data[j++] = '\n';
+    if (length == 0) {
+        if (ret_length != NULL) {
+            *ret_length = 0;
         }
+        return NULL;
     }
 
-    int mtable_index = mod_table[input_length % 3];
-    for (i = 0; i < mtable_index; i++)
-        encoded_data[j++] = '=';
+    result = (char *) malloc(((length + 2) / 3) * (4 * sizeof(char)));
+    p = result;
 
-    encoded_data[j++] = '\0';
+    while (length > 2) { /* keep going until we have less than 24 bits */
+        *p++ = base64_table[current[0] >> 2];
+        *p++ = base64_table[((current[0] & 0x03) << 4) + (current[1] >> 4)];
+        *p++ = base64_table[((current[1] & 0x0f) << 2) + (current[2] >> 6)];
+        *p++ = base64_table[current[2] & 0x3f];
 
-    return encoded_data;
+        current += 3;
+        length -= 3; /* we just handle 3 octets of data */
+    }
+
+    /* now deal with the tail end of things */
+    if (length != 0) {
+        *p++ = base64_table[current[0] >> 2];
+        if (length > 1) {
+            *p++ = base64_table[((current[0] & 0x03) << 4) + (current[1] >> 4)];
+            *p++ = base64_table[(current[1] & 0x0f) << 2];
+            *p++ = base64_pad;
+        } else {
+            *p++ = base64_table[(current[0] & 0x03) << 4];
+            *p++ = base64_pad;
+            *p++ = base64_pad;
+        }
+    }
+    if (ret_length != NULL) {
+        *ret_length = (int)(p - result);
+    }
+    *p = '\0';
+    return result;
 }
-
 
 static PyObject * ft_base64string(PyObject *self, PyObject *args)
 {
