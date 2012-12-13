@@ -12,11 +12,11 @@ static const char base64_pad = '=';
 
 
 // Stolen from https://github.com/php/php-src/blob/master/ext/standard/base64.c
- char *base64_encode(const char *str, size_t length, size_t *ret_length, int cut)
+unsigned char *base64_encode(const unsigned char *str, size_t length, size_t *ret_length, int cut)
 {
-    const  char *current = str;
-     char *p;
-     char *result;
+    const unsigned char *current = str;
+    unsigned char *p;
+    unsigned char *result;
 
     if (length == 0) {
         if (ret_length != NULL) {
@@ -28,7 +28,7 @@ static const char base64_pad = '=';
     size_t out_l = ((length + 2) / 3) * (4 * sizeof(char));
     out_l += cut * ((out_l)/76) * 2 * (4 * sizeof(char));
 
-    result = malloc(out_l);
+    result = (unsigned char *) malloc(out_l);
     p = result;
 
     int splitter = 0;
@@ -79,28 +79,28 @@ static const char base64_pad = '=';
 
 static PyObject * ft_base64string(PyObject *self, PyObject *args)
 {
-    const char *string;
+    const unsigned char *string;
     size_t len_in = 0, len_out = 0;
 
     if (!PyArg_ParseTuple(args, "s", &string))
         return NULL;
 
-	len_in = strlen(string);
-	char *out = base64_encode(string, len_in, &len_out, 1);
+	len_in = strlen((char*)string);
+	unsigned char *out = base64_encode(string, len_in, &len_out, 1);
 
     return Py_BuildValue("s#", out, len_out);
 }
 
 static PyObject * ft_base64(PyObject *self, PyObject *args)
 {
-    const char *string;
+    const unsigned char *string;
     size_t len_in = 0, len_out = 0;
 
     if (!PyArg_ParseTuple(args, "s", &string))
         return NULL;
 
-    len_in = strlen(string);
-    char *out = base64_encode(string, len_in, &len_out, 0);
+    len_in = strlen((char*)string);
+    unsigned char *out = base64_encode(string, len_in, &len_out, 0);
 
     return Py_BuildValue("s#", out, len_out);
 }
