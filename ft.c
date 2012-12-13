@@ -102,7 +102,7 @@ static PyObject * ft_base64(PyObject *self, PyObject *args)
     len_in = strlen(string);
     char *out = base64_encode(string, len_in, &len_out, 0);
 
-    return Py_BuildValue("s", out);
+    return Py_BuildValue("s#", out, len_out);
 }
 
 
