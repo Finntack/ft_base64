@@ -80,6 +80,7 @@ unsigned char *base64_encode(const unsigned char *str, size_t length, size_t *re
 static PyObject * ft_base64string(PyObject *self, PyObject *args)
 {
     const unsigned char *string;
+	PyObject *ret;
     size_t len_in = 0, len_out = 0;
 
     if (!PyArg_ParseTuple(args, "s", &string))
@@ -88,12 +89,15 @@ static PyObject * ft_base64string(PyObject *self, PyObject *args)
 	len_in = strlen((char*)string);
 	unsigned char *out = base64_encode(string, len_in, &len_out, 1);
 
-    return Py_BuildValue("s#", out, len_out);
+	ret = Py_BuildValue("s#", out, len_out);
+	free(out);
+    return ret;
 }
 
 static PyObject * ft_base64(PyObject *self, PyObject *args)
 {
     const unsigned char *string;
+	PyObject *ret;
     size_t len_in = 0, len_out = 0;
 
     if (!PyArg_ParseTuple(args, "s", &string))
@@ -102,7 +106,9 @@ static PyObject * ft_base64(PyObject *self, PyObject *args)
     len_in = strlen((char*)string);
     unsigned char *out = base64_encode(string, len_in, &len_out, 0);
 
-    return Py_BuildValue("s#", out, len_out);
+	ret = Py_BuildValue("s#", out, len_out);
+	free(out);
+    return ret;
 }
 
 
