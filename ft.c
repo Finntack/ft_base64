@@ -65,11 +65,7 @@ unsigned char *base64_encode(const unsigned char *str, size_t length, size_t *re
         }
     }
 
-    if (cut)
-    {
-        *ret_length = out_l;
-    }
-    else if (ret_length != NULL) {
+    if (ret_length != NULL) {
         *ret_length = (int)(p - result);
     }
 
