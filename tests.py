@@ -1,6 +1,4 @@
  # -*- coding: UTF-8 -*-
-"""Unit test for roman.py"""
-
 import ft
 import unittest
 import base64
