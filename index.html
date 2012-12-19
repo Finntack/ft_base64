@@ -1,0 +1,76 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Ft base64 by KillerX</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1 class="header">Ft base64</h1>
+        <p class="header">A python module replacing the native base64.encodestring()</p>
+
+        <ul>
+          <li class="download"><a class="buttons" href="https://github.com/KillerX/ft_base64/zipball/master">Download ZIP</a></li>
+          <li class="download"><a class="buttons" href="https://github.com/KillerX/ft_base64/tarball/master">Download TAR</a></li>
+          <li><a class="buttons github" href="https://github.com/KillerX/ft_base64">View On GitHub</a></li>
+        </ul>
+
+        <p class="header">This project is maintained by <a class="header name" href="https://github.com/KillerX">KillerX</a></p>
+
+
+      </header>
+      <section>
+        <h2>What</h2>
+
+<p>Superfast replacement for 2 functions form the python base64 module. Provided are functions that can replace <code>base64.b64encode()</code> and <code>base64.encodestring()</code>.</p>
+
+<h2>Why?</h2>
+
+<p>Well, agree that normally running a function such as this in 0.00001 or 0.000001 seconds does not really make a difference, but if you have some time sensitive and/or massive processing going on, 10x improvement can mean a lot</p>
+
+<h2>How</h2>
+
+<h3>... to install</h3>
+
+<div class="highlight"><pre><span class="nv">$ </span>git clone git@github.com:KillerX/ft_base64.git
+<span class="nv">$ </span>sudo python setyp.py install
+</pre></div>
+
+<h3>... to use</h3>
+
+<p>The functions are almost drop in replacement.</p>
+
+<p>Otherwise here is an example:</p>
+
+<div class="highlight"><pre><span class="kn">import</span> <span class="nn">ft</span>
+<span class="kn">import</span> <span class="nn">base64</span>
+
+<span class="sd">"""ft.base64 behaves identically to base64.b64encode"""</span>
+<span class="n">shortString</span> <span class="o">=</span> <span class="s">"The quick brown fox jumps over the lazy dog!!"</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64encode</span><span class="p">(</span><span class="n">shortString</span><span class="p">)</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">ft</span><span class="o">.</span><span class="n">base64</span><span class="p">(</span><span class="n">shortString</span><span class="p">)</span>
+
+<span class="sd">"""ft.base64string behaves similarly to base64.encodestring. </span>
+<span class="sd">See lines below for the difference"""</span>
+<span class="n">ft</span><span class="o">.</span><span class="n">base64string</span><span class="p">(</span><span class="s">"FOO"</span><span class="p">)</span>
+<span class="n">base64</span><span class="o">.</span><span class="n">encodestring</span><span class="p">(</span><span class="s">"BAR"</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="s">"</span><span class="se">\r\n</span><span class="s">"</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+</pre></div>
+      </section>
+      <footer>
+        <p><small>Hosted on <a href="https://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+		
+  </body>
+</html>
