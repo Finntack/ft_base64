@@ -403,9 +403,7 @@ class base64_simpletest(unittest.TestCase):
 		self.assertEquals(a, b)
 
 	def testNone(self):
-		a = base64.b64encode(None)
-		b = ft.base64(None)
-		self.assertEquals(a, b)
+		self.assertRaises(TypeError, ft.base64, None)
 
 
 class base64_binary(unittest.TestCase):
