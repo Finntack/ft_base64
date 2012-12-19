@@ -397,6 +397,17 @@ class base64_simpletest(unittest.TestCase):
 		b = ft.base64(shortString)
 		self.assertEquals(a, b)
 
+	def testEmpty(self):
+		a = base64.b64encode("")
+		b = ft.base64("")
+		self.assertEquals(a, b)
+
+	def testNone(self):
+		a = base64.b64encode(None)
+		b = ft.base64(None)
+		self.assertEquals(a, b)
+
+
 class base64_binary(unittest.TestCase):
 
 	"""http://octodex.github.com/images/pythocat.png"""
@@ -485,6 +496,12 @@ class base64_string(unittest.TestCase):
 		# Python inserts only \n instead of \r\n as defined by standard + attaches an extra line
 		b = base64.encodestring(longString+"!!").replace("\n", "\r\n").strip()
 		self.assertEquals(a,b)
+
+	def testEmpty(self):
+		a = ft.base64string("")
+		# Python inserts only \n instead of \r\n as defined by standard + attaches an extra line
+		b = base64.encodestring("").replace("\n", "\r\n").strip()
+		self.assertEquals(a, b)
 
 
 if __name__ == "__main__":
