@@ -79,10 +79,8 @@ PyObject * doEncode(PyObject *args, int cut)
     PyObject *ret;
     size_t len_in = 0, len_out = 0;
 
-    if (!PyArg_ParseTuple(args, "s", &string))
+    if (!PyArg_ParseTuple(args, "s#", &string, &len_in))
         return NULL;
-
-    len_in = strlen((char*)string);
 
     if (len_in == 0)
     {
