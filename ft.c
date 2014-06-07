@@ -27,7 +27,7 @@ unsigned char *base64_encode(const unsigned char *str, size_t length, size_t *re
         return NULL;
     }
 
-    size_t out_l = ((length + ( (length % 3) ? (3 - (length % 3)) : 0) ) / 3) * 4;
+    size_t out_l = ((length + ((length % 3) ? (3 - (length % 3)) : 0)) / 3) * 4;
     if(cut) {
         out_l += ((out_l) / 76) * 2;
     }
